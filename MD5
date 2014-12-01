@@ -1,0 +1,12 @@
+4520ac24a94ba1087ca73a322b300f26 *DESCRIPTION
+3fdc201ef0a746dbe2d971c0e0938dc1 *NAMESPACE
+6d400b27a8182bd380bed1a8f04a4302 *R/chromer-package.R
+6abe8705eb7dde797dfb2799a7fbaae0 *R/clean-data.R
+45f35f360046f9df20bf802d7b5619b0 *R/counts.R
+41d06ef36ad272c65d7eeb16e227fbc8 *README.md
+db50d6f8a559b39563fac867eba01371 *man/chrom_counts.Rd
+fbcc5ff657b04e99b7241ee66fb48d7d *man/chromer.Rd
+d4df2d8df7de656f8088d6c4a9fed96f *man/summarize_counts.Rd
+935444173baccf5a718bae48a1299cf0 *tests/testthat/helper-chromer.R
+35cf503095ec1b7024b4b5d657e8c7d7 *tests/testthat/test-data-summary.R
+47236d296a1ab5ed411cf8364c738b4b *tests/testthat/test-rank-query.R
