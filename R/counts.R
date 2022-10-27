@@ -13,7 +13,7 @@
 #' @details When using the API to query for species, both matched names and resolved names are searched. This means that all records for potential synonyms will be returned as well. Currently species binomials must be specified by either 'genus species' (i.e., space between genus and species) or 'genus_species'.
 #'
 #' To search for subspecies (subsp.) or varieties (var.), you can use search terms like:
-#' 
+#'
 #' \code{"Solanum acaule var. albicans"}.
 #'
 #' Searching for \code{"Solanum acaule"} will return all subspecies and varieties.
@@ -24,12 +24,11 @@
 #'
 #' @import dplyr
 #' @importFrom httr GET content stop_for_status
-#' @importFrom data.table rbindlist
-#' 
+#'
 #' @export chrom_counts
 #'
 #' @examples \dontrun{
-#' 
+#'
 #' ## Get all counts for genus Castilleja
 #' chrom_counts("Castilleja", "genus")
 #'
@@ -47,18 +46,19 @@
 #'
 #' ## Get all counts for the Orobanchaceae
 #' chrom_counts("Orobanchaceae", "family")
-#' 
+#'
 #' }
-chrom_counts <-  function(taxa,
+chrom_counts <- function(taxa,
                           rank=c("species", "genus", "family", "majorGroup"),
                           full=FALSE, foptions=list()){
-    
-    out <- suppressWarnings(check_ccdb_input(rank, full)) 
+
+    rank <- match.arg(rank)
+    out <- check_ccdb_input(rank, full)
     l   <- lapply(taxa, function(x)
                 chrom_counts_single(x, rank, out, foptions=foptions))
-    res <- tbl_df(rbindlist(l))
+    res <- tibble::as_tibble(dplyr::bind_rows(l))
     res <- tidy_output(res)
-    attr(res, "class") <- c(attr(res,"class"), "chrom.counts")
+    if(!is.null(res)) attr(res, "class") <- c(attr(res,"class"), "chrom.counts")
     res
 }
 
@@ -67,7 +67,7 @@ chrom_counts_single <- function(taxa, rank, out, foptions){
 
     if (rank == "species")
         taxa <- species_API(taxa)
-    
+
     url <- paste0("http://ccdb.tau.ac.il/services/",
                   out,"/?", rank,"=",taxa,"&format=","json")
     counts_call <- GET(url, foptions)
@@ -76,8 +76,8 @@ chrom_counts_single <- function(taxa, rank, out, foptions){
 
     f <- function(x) if (is.null(x)) NA_character_ else x
     counts_data_json <- lapply(counts_data_json, lapply, f)
-    counts_data <- data.frame(rbindlist(counts_data_json))
-    
+    counts_data <- data.frame(dplyr::bind_rows(counts_data_json))
+
     if (length(counts_data) > 0)
         counts_data <- add_binomial(counts_data)
 
@@ -87,8 +87,8 @@ chrom_counts_single <- function(taxa, rank, out, foptions){
 
 ## Utility function for checking input
 check_ccdb_input <- function(rank, full){
-        
-    if (length(rank) != 1 | !rank %in% rank_names())
+
+    if (length(rank) != 1 || !rank %in% rank_names())
         stop("Specify a single taxonomic rank. \n Options are 'species', 'genus', 'family', and 'majorGroup'.")
 
     if (full){
@@ -114,9 +114,12 @@ species_API <- function(x)
 ## Function for pulling out species name without the authorities
 ## Keeping varieties and subspecies
 ## These are indicated by var. and subsp., respectively
-add_binomial <- function(x)
+add_binomial <- function(x) {
+    resolved_name <- NULL # avoid Note (in R CMD check) about global variable
+
     x %>% rowwise() %>%
-    mutate_(resolved_binomial = ~short_species_name(resolved_name))
+    mutate(resolved_binomial = short_species_name(resolved_name))
+}
 
 
 short_species_name <- function(x){
@@ -141,13 +144,14 @@ tidy_output <- function(x){
                      "taxonomic_status", "genus", "family", "major_group",
                      "id", "source", "internal_id", "reference", "voucher")
 
-    if (ncol(x) == 0){
+    if (ncol(x) == 0) {
         return(x)
-    } else if (ncol(x) == 15){
+    } else if (ncol(x) %in% c(15, 16)) {
         return(x[,ord_full])
-    } else if (ncol(x) == 4){
+    } else if (ncol(x) %in% c(4, 5)) {
         return(x[,ord_partial])
+    } else {
+      return(x)
     }
 
 }
-    
