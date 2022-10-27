@@ -1,9 +1,9 @@
-chromer 0.2
+chromer 0.3
 =============
 
 ### MINOR CHANGES
 
-* New maintainer, Karl Broman <kbroman.org>
+* New maintainer, [Karl Broman](https://kbroman.org)
 
 * Changed software license, CC0 -> MIT
 
