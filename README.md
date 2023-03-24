@@ -1,5 +1,5 @@
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/kbroman/chromer/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/kbroman/chromer/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/ropensci/chromer/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/chromer/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/chromer)](https://CRAN.R-project.org/package=chromer)
 <!-- badges: end -->
 
@@ -10,7 +10,7 @@ Database (CCDB)](http://ccdb.tau.ac.il/home/)
 [API](http://ccdb.tau.ac.il/services/). The CCDB is a community
 resource for plant chromosome numbers. For more details on the
 database, see the associated publication by Rice et al. (2014)
-[doi:10.1111/nph.13191](https://doi.org/10.1111/nph.13191) in *New Phytologist*.
+<doi:10.1111/nph.13191> in *New Phytologist*.
 
 This package is maintained by [Karl Broman](https://kbroman.org) and
 was formerly maintained by [Paula Andrea

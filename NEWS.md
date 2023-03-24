@@ -1,3 +1,15 @@
+chromer 0.4
+=============
+
+### Minor changes
+
+* Skip the tests on CRAN, so that it doesn't give errors if the
+  API to <http://ccdb.tau.ac.il/> is down.
+
+* Added internal function to check if CCDB is down, and skip the tests
+  when that's true.
+
+
 chromer 0.3
 =============
 
